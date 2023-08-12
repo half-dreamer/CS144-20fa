@@ -8,6 +8,7 @@
 #include <string>
 #include <sys/socket.h>
 #include <utility>
+#include <array>
 
 //! Wrapper around [IPv4 addresses](@ref man7::ip) and DNS operations.
 class Address {
