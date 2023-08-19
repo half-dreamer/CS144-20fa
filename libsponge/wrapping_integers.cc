@@ -14,8 +14,14 @@ using namespace std;
 //! \param n The input absolute 64-bit sequence number
 //! \param isn The initial sequence number
 WrappingInt32 wrap(uint64_t n, WrappingInt32 isn) {
-    DUMMY_CODE(n, isn);
-    return WrappingInt32{0};
+    // result - isn + 2>>32 * x = n
+    uint32_t result;
+    n = n & 0x00000000FFFFFFFF;
+    result = n + isn.raw_value();
+    // ^ is XOR operator!! not exponent operator!!
+    // result = n + (2 ^ 32) + isn.raw_value();
+
+    return WrappingInt32{result};
 }
 
 //! Transform a WrappingInt32 into an "absolute" 64-bit sequence number (zero-indexed)
@@ -29,6 +35,23 @@ WrappingInt32 wrap(uint64_t n, WrappingInt32 isn) {
 //! and the other stream runs from the remote TCPSender to the local TCPReceiver and
 //! has a different ISN.
 uint64_t unwrap(WrappingInt32 n, WrappingInt32 isn, uint64_t checkpoint) {
-    DUMMY_CODE(n, isn, checkpoint);
-    return {};
+    // n -isn + (1u << 32) * x = result; |result - checkpoint| < (1u << 32)
+    uint64_t result = n - isn >= 0 ? n - isn : n - isn + (1ul << 32);
+    uint64_t checkpoint_high = checkpoint & 0xFFFFFFFF00000000;
+    uint64_t checkpoint_low = checkpoint & 0x00000000FFFFFFFF;
+    if (result - checkpoint_low > (1u << 31) && result - checkpoint_low <= (1ul << 32)) {
+        if (checkpoint_high != 0) {
+        result += checkpoint_high - (1ul << 32);
+        } else {
+        result += checkpoint_high;
+        }
+    } else if (result - checkpoint_low <= (1ul << 31)) {
+        result += checkpoint_high;
+    } else if (checkpoint_low - result <= (1ul << 31)) {
+        result += checkpoint_high;
+    } else {
+        result += checkpoint_high + (1ul << 32);
+    }
+
+    return result;
 }
