@@ -6,8 +6,11 @@
 #include "tcp_segment.hh"
 #include "wrapping_integers.hh"
 
+#include <map>
+#include <optional>
 #include <functional>
 #include <queue>
+#include <deque>
 
 //! \brief The "sender" part of a TCP implementation.
 
@@ -23,6 +26,8 @@ class TCPSender {
     //! outbound queue of segments that the TCPSender wants sent
     std::queue<TCPSegment> _segments_out{};
 
+    std::deque<TCPSegment> _segments_sent_not_acked{};
+
     //! retransmission timer for the connection
     unsigned int _initial_retransmission_timeout;
 
@@ -31,6 +36,10 @@ class TCPSender {
 
     //! the (absolute) sequence number for the next byte to be sent
     uint64_t _next_seqno{0};
+    uint64_t received_ack;
+    uint16_t windowSize;
+
+    bool isSynSent = false;
 
   public:
     //! Initialize a TCPSender
