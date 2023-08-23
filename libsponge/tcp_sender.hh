@@ -6,11 +6,11 @@
 #include "tcp_segment.hh"
 #include "wrapping_integers.hh"
 
+#include <deque>
+#include <functional>
 #include <map>
 #include <optional>
-#include <functional>
 #include <queue>
-#include <deque>
 
 //! \brief The "sender" part of a TCP implementation.
 
@@ -30,6 +30,9 @@ class TCPSender {
 
     //! retransmission timer for the connection
     unsigned int _initial_retransmission_timeout;
+    unsigned int RTO;
+    unsigned int retransmission_count = 0;
+    size_t time_count = 0;
 
     //! outgoing stream of bytes that have not yet been sent
     ByteStream _stream;
@@ -40,6 +43,8 @@ class TCPSender {
     uint16_t windowSize;
 
     bool isSynSent = false;
+    bool isFinSent = false;
+    bool isEmptyWindow = false;
 
   public:
     //! Initialize a TCPSender
