@@ -80,20 +80,22 @@ class TCPConnection {
     bool active() const;
     //!@}
 
+    void sendSegToRealOut();
+
     //! Construct a new connection from a configuration
-    explicit TCPConnection(const TCPConfig &cfg) : _cfg{cfg} {}
+    explicit TCPConnection(const TCPConfig &cfg) : _cfg{cfg} { ; }
 
-    //! \name construction and destruction
-    //! moving is allowed; copying is disallowed; default construction not possible
+        //! \name construction and destruction
+        //! moving is allowed; copying is disallowed; default construction not possible
 
-    //!@{
-    ~TCPConnection();  //!< destructor sends a RST if the connection is still open
-    TCPConnection() = delete;
-    TCPConnection(TCPConnection &&other) = default;
-    TCPConnection &operator=(TCPConnection &&other) = default;
-    TCPConnection(const TCPConnection &other) = delete;
-    TCPConnection &operator=(const TCPConnection &other) = delete;
-    //!@}
+        //!@{
+        ~TCPConnection();  //!< destructor sends a RST if the connection is still open
+        TCPConnection() = delete;
+        TCPConnection(TCPConnection && other) = default;
+        TCPConnection &operator=(TCPConnection &&other) = default;
+        TCPConnection(const TCPConnection &other) = delete;
+        TCPConnection &operator=(const TCPConnection &other) = delete;
+        //!@}
 };
 
 #endif  // SPONGE_LIBSPONGE_TCP_FACTORED_HH
