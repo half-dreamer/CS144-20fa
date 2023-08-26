@@ -100,6 +100,9 @@ void TCPSender::fill_window() {
 //! \param ackno The remote receiver's ackno (acknowledgment number)
 //! \param window_size The remote receiver's advertised window size
 void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_size) {
+    if (!isSynSent) {
+        return;
+    }
     uint64_t ack_64 = unwrap(ackno, _isn, _next_seqno);
     // if ack_64 is invalid
     TCPSegment firstUnackedOutgoingSeg = _segments_sent_not_acked.front();
