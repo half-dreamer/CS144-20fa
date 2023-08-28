@@ -62,7 +62,7 @@ void TCPSender::fill_window() {
     //     }
     // }
     // fill in the sendingSeg (to fill the window)
-    while (windowSize > bytes_in_flight()) {
+    while (windowSize > bytes_in_flight() && !isFinSent) {
         if (isSynSent == false) {
             // close state but start to send things.
             sendingSeg.header().syn = true;
@@ -89,8 +89,6 @@ void TCPSender::fill_window() {
         _next_seqno += sendingSeg.header().syn + sendingSeg.header().fin + sendingSeg.payload().size();
         _segments_out.push(sendingSeg);
         _segments_sent_not_acked.push_back(sendingSeg);
-        sendingSeg.header().syn = false;
-        sendingSeg.header().fin = false;
     }
     if (isEmptyWindow) {
         windowSize = 0;
@@ -150,8 +148,8 @@ void TCPSender::tick(const size_t ms_since_last_tick) {
                 RTO *= 2;
                 ++retransmission_count;
             }
-            time_count = 0;
         }
+        time_count = 0;
     }
 }
 
