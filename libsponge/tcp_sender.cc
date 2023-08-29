@@ -103,6 +103,7 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
     }
     uint64_t ack_64 = unwrap(ackno, _isn, _next_seqno);
     // if ack_64 is invalid
+    // should not use TCPSegment firstUnackerOutgoingSeg = _segments_sent_not_acked.front()`
     const TCPSegment &firstUnackedOutgoingSeg = _segments_sent_not_acked.front();
     if (window_size > 0) {
         isEmptyWindow = false;
