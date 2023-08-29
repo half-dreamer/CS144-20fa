@@ -74,7 +74,7 @@ void TCPSender::fill_window() {
 
         size_t payloadSize =
             min(windowSize - bytes_in_flight(), min(_stream.buffer_size(), TCPConfig::MAX_PAYLOAD_SIZE));
-        sendingSeg.payload() = Buffer(_stream.read(payloadSize));
+        sendingSeg.payload() = Buffer(move(_stream.read(payloadSize)));
         if (_stream.input_ended() && _stream.eof() && payloadSize + sendingSeg.header().syn < windowSize && !isFinSent) {
             sendingSeg.header().fin = true;
             isFinSent = true;
@@ -103,7 +103,7 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
     }
     uint64_t ack_64 = unwrap(ackno, _isn, _next_seqno);
     // if ack_64 is invalid
-    TCPSegment firstUnackedOutgoingSeg = _segments_sent_not_acked.front();
+    const TCPSegment &firstUnackedOutgoingSeg = _segments_sent_not_acked.front();
     if (window_size > 0) {
         isEmptyWindow = false;
     }
