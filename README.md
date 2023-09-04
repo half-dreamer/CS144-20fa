@@ -55,11 +55,11 @@ CS144是Stanford的计算机网络课程，网课视频和project均向大众开
 
 4. 虚拟机中有些东西也没有事先配好，缺少的东西需要自己 ` sudo apt install` ，所以当看到头文件之类的报错，先怀疑是环境的问题
 
-5. 虽然说Project里说要使用C++的现代特性，但其实用的也不多，不了解关系也不会非常大；但最好还是要有一点C++现代特性的了解，否则有些不符合现代特性的代码即使是正确的，也无法通过编译（比如在Constructor里要用的Initialization list）（貌似是因为Makefile中的cflag给了effc++11的缘故) ；对于C++的现代特性，可以上一上Stanford的CS106L，详见笔者的 [C++自学总结](https://www.cc98.org/topic/5550820) 
+5. 虽然说Project里说要使用C++的现代特性，但其实用的也不多，不了解关系也不会非常大；但最好还是要有一点C++现代特性的了解，否则有些不符合现代特性的代码即使是正确的，也无法通过编译（比如在Constructor里要用的Initialization list）（貌似是因为Makefile中的cflag给了effc++11的缘故) ；对于C++的现代特性，可以上一上Stanford的CS106L，详见笔者的 [C++自学总结](https://github.com/half-dreamer/AP1400-2) 
 
 6. 整个lab是从底部开始搭建，从lab1的StreamReassembler，lab2的TCP Receiver再到lab3的TCPSender和最终将lab1、2、3合并的lab4 TCPConnection，实现一个能实现可靠传输、乱序字节流重排及缓存、超时重传、快速重传、流量控制、拥塞控制、连接管理等功能的TCP
 
-   
+    
 
    ![1693794682869](assets/1693794682869.png)
 
